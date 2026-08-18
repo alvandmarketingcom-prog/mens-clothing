@@ -296,13 +296,46 @@ a[class*="bg-apple-blue"],
   -webkit-text-fill-color: #0A0A0A !important;
 }
 
-/* Orange accent buttons — white text */
-.dark button.bg-\[\#FF6B35\],
-.dark a.bg-\[\#FF6B35\],
+/* Orange/blue accent buttons — white text + white icons (light & dark) */
+.bg-apple-blue,
+button.bg-apple-blue,
+a.bg-apple-blue,
+.bg-\[\#FF6B35\],
+button.bg-\[\#FF6B35\],
+a.bg-\[\#FF6B35\],
 .dark .bg-apple-blue,
-.dark button.bg-apple-blue {
+.dark button.bg-apple-blue,
+.dark a.bg-apple-blue,
+.dark button.bg-\[\#FF6B35\],
+.dark a.bg-\[\#FF6B35\] {
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Force SVG icons on blue/orange buttons to pure white — both themes */
+.bg-apple-blue svg,
+button.bg-apple-blue svg,
+a.bg-apple-blue svg,
+.bg-\[\#FF6B35\] svg,
+button.bg-\[\#FF6B35\] svg,
+a.bg-\[\#FF6B35\] svg,
+.dark .bg-apple-blue svg,
+.dark button.bg-apple-blue svg,
+.dark a.bg-apple-blue svg,
+.dark .bg-\[\#FF6B35\] svg,
+.dark button.bg-\[\#FF6B35\] svg,
+[class*="bg-apple-blue"] svg,
+[class*="bg-[#FF6B35]"] svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+}
+/* Filled icons (heart etc.) need fill white when on blue bg */
+.bg-apple-blue svg [fill="currentColor"],
+.bg-apple-blue svg[fill="currentColor"],
+button.bg-apple-blue svg path[fill="currentColor"],
+.dark .bg-apple-blue svg path[fill="currentColor"] {
+  fill: #FFFFFF !important;
 }
 
 /* ========== Light / Dark surface + text color structure ========== */

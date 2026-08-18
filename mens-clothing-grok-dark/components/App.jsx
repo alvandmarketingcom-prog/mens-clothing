@@ -6433,11 +6433,11 @@ const generateProductCode = (sellerKey, productId, shopName) => {
                         e.stopPropagation();
                         setOldPriceOpen(showOld ? null : p.id);
                       }}
-                      className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-apple-blue flex items-center justify-center hover:opacity-90 transition shadow-sm"
+                      className="flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-apple-blue text-white flex items-center justify-center hover:opacity-90 transition shadow-sm"
                       title="قیمت قبل حراج"
                       aria-label="قیمت قبل حراج"
                     >
-                      <Icon name="sell" size={14} />
+                      <Icon name="sell" size={14} className="text-white" />
                     </button>
                   ) : null}
                   {p.oldPrice && showOld ? (
@@ -9675,7 +9675,7 @@ const generateProductCode = (sellerKey, productId, shopName) => {
                           {(addresses || []).map(a => (
                             <div key={a.id} className={`p-4 rounded-2xl border bg-white dark:bg-primary-950 ${a.isDefault ? 'border-apple-blue' : 'border-primary-200 dark:border-white/15'}`}>
                               <div className="flex items-start justify-between gap-2 mb-2">
-                                <div className="flex items-center gap-2"><span className="text-sm font-bold text-primary-900 dark:text-white">{a.title}</span>{a.isDefault && <span className="text-xs px-2 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue font-medium">پیش‌فرض</span>}</div>
+                                <div className="flex items-center gap-2"><span className="text-sm font-bold text-primary-900 dark:text-white">{a.title}</span>{a.isDefault && <span className="text-xs px-2 py-0.5 rounded-full bg-apple-blue/10 text-apple-blue font-medium text-white">پیش‌فرض</span>}</div>
                                 <div className="flex items-center gap-1">
                                   <button type="button" onClick={() => { setEditingAddressId(a.id); setAddressForm({ ...a }); setAddressFormOpen(true); }} className="p-1.5 rounded-full hover:bg-primary-50 dark:hover:bg-primary-800 text-primary-500"><Icon name="pencil" size={14} /></button>
                                   <button type="button" onClick={() => setAddressDeleteConfirm(a.id)} className="p-1.5 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500"><Icon name="trash" size={14} /></button>
@@ -11296,7 +11296,7 @@ const generateProductCode = (sellerKey, productId, shopName) => {
                             </div>
                             <div>
                               <h3 className="text-xs font-bold text-primary-700 dark:text-white/80 mb-2 flex items-center gap-1.5">
-                                <span className="w-2 h-2 rounded-full bg-apple-blue" /> تیکت‌های ادمین
+                                <span className="w-2 h-2 rounded-full bg-apple-blue text-white" /> تیکت‌های ادمین
                               </h3>
                               {renderList(adminTickets, 'تیکتی با ادمین نیست')}
                             </div>
@@ -15664,7 +15664,7 @@ const generateProductCode = (sellerKey, productId, shopName) => {
               <div className="max-w-7xl mx-auto px-3 sm:px-4">
                 <div className="flex items-center justify-between mb-5 sm:mb-6 gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-apple-blue flex-shrink-0" aria-hidden="true">
+                    <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-apple-blue flex-shrink-0 text-white" aria-hidden="true">
                       <Icon name="percent" size={16} className="text-white" />
                     </span>
                     <h2 className="section-title text-primary-900 dark:text-white text-lg sm:text-xl">پیشنهادات شگفت‌انگیز</h2>
@@ -16380,7 +16380,7 @@ const generateProductCode = (sellerKey, productId, shopName) => {
                       <img src={post.image || 'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=1200&h=500&fit=crop&q=80'} alt="" className="w-full h-full object-cover" />
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-xs">
-                      <span className="px-2.5 py-1 rounded-full bg-apple-blue/10 text-apple-blue font-bold">{post.cat}</span>
+                      <span className="px-2.5 py-1 rounded-full bg-apple-blue/10 text-apple-blue font-bold text-white">{post.cat}</span>
                       {(post.tags || []).map(t => <span key={t} className="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900 text-primary-600 dark:text-white/70">#{t}</span>)}
                     </div>
                     <h1 className="text-xl sm:text-2xl font-bold text-primary-900 dark:text-white leading-snug">{post.title}</h1>
@@ -16812,7 +16812,7 @@ const generateProductCode = (sellerKey, productId, shopName) => {
                     onClick={() => { setMobileMenuOpen(false); openProfilePage(); }}
                     className="w-full flex items-center gap-3 p-3.5 rounded-2xl bg-white dark:bg-primary-900 border border-primary-100 dark:border-white/10 shadow-sm text-right active:scale-[0.99] transition"
                   >
-                    <span className="w-11 h-11 rounded-full bg-apple-blue/10 dark:bg-apple-blue/15 text-apple-blue flex items-center justify-center flex-shrink-0">
+                    <span className="w-11 h-11 rounded-full bg-apple-blue/10 dark:bg-apple-blue/15 text-apple-blue flex items-center justify-center flex-shrink-0 text-white">
                       <Icon name="user" size={20} />
                     </span>
                     <span className="min-w-0 flex-1">
@@ -16833,7 +16833,7 @@ const generateProductCode = (sellerKey, productId, shopName) => {
                       onClick={() => { setMobileMenuOpen(false); openAuth(); }}
                       className="flex flex-col items-center gap-1.5 p-3 rounded-2xl bg-white dark:bg-primary-900 border border-primary-100 dark:border-white/10 shadow-sm active:scale-[0.99] transition"
                     >
-                      <span className="w-10 h-10 rounded-full bg-apple-blue/10 text-apple-blue flex items-center justify-center">
+                      <span className="w-10 h-10 rounded-full bg-apple-blue/10 text-apple-blue flex items-center justify-center text-white">
                         <Icon name="user" size={18} />
                       </span>
                       <span className="text-xs font-bold text-primary-900 dark:text-white">ورود خریدار</span>
@@ -17383,7 +17383,7 @@ const generateProductCode = (sellerKey, productId, shopName) => {
                     (notifications || []).slice(0, 40).map(n => (
                       <button key={n.id} type="button" onClick={() => markNotifRead(n.id)} className={`w-full text-right px-3.5 py-3 rounded-2xl border border-primary-100 dark:border-white/10 transition hover:bg-primary-50/90 dark:hover:bg-[#1A1C20] ${n.read ? 'opacity-75 bg-white dark:bg-black/40' : 'bg-apple-blue/5 dark:bg-[#FF6B35]/10 border-apple-blue/20 dark:border-[#FF6B35]/25'}`}>
                         <div className="flex items-start gap-2.5">
-                          {!n.read && <span className="mt-1.5 w-2 h-2 rounded-full bg-apple-blue dark:bg-[#FF6B35] flex-shrink-0" />}
+                          {!n.read && <span className="mt-1.5 w-2 h-2 rounded-full bg-apple-blue dark:bg-[#FF6B35] flex-shrink-0 text-white" />}
                           <div className="min-w-0 flex-1">
                             <p className="text-xs font-bold text-primary-900 dark:text-white">{n.title}</p>
                             <p className="text-xs text-primary-500 dark:!text-white line-clamp-2 mt-0.5">{n.body}</p>
@@ -17649,7 +17649,7 @@ const generateProductCode = (sellerKey, productId, shopName) => {
               <div className="relative w-full sm:max-w-sm bg-white dark:bg-primary-950 rounded-t-2xl sm:rounded-2xl p-5 sm:p-6 shadow-2xl">
                 <button type="button" onClick={closeAuth} className="absolute top-3 left-3 p-2 rounded-full hover:bg-primary-50 dark:hover:bg-primary-800 text-primary-500" aria-label="بستن"><Icon name="x" size={18} /></button>
                 <div className="text-center mb-5">
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-apple-blue/10 text-apple-blue flex items-center justify-center"><Icon name="user" size={22} /></div>
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-apple-blue/10 text-apple-blue flex items-center justify-center text-white"><Icon name="user" size={22} /></div>
                   <h3 className="text-lg font-bold text-primary-900 dark:text-white">
                     {authStep === 'phone' && (authMode === 'seller' ? 'ورود فروشنده' : 'ورود خریدار')}
                     {authStep === 'otp' && 'کد تأیید'}
