@@ -1,9 +1,55 @@
 import './globals.css';
 
+const SITE_URL = 'https://pirahanmardane.ir';
+const SITE_NAME = 'پیراهن مردانه';
+const SITE_DESC =
+  'فروشگاه اینترنتی پیراهن مردانه — رسمی، کروات، لینن و آستین کوتاه از فروشندگان معتبر';
+
 export const metadata = {
-  title: 'پیراهن مردانه | PIRAHANMARDANE.IR',
-  description:
-    'فروشگاه اینترنتی پیراهن مردانه — رسمی، کروات، لینن و آستین کوتاه از فروشندگان معتبر',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | PIRAHANMARDANE.IR`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESC,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  formatDetection: {
+    telephone: true,
+    email: false,
+    address: false,
+  },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'fa_IR',
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} | PIRAHANMARDANE.IR`,
+    description: SITE_DESC,
+    images: [{ url: '/logo.webp', width: 512, height: 512, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${SITE_NAME} | PIRAHANMARDANE.IR`,
+    description: SITE_DESC,
+    images: ['/logo.webp'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   other: {
     'theme-color': '#1d1d1f',
   },
@@ -14,6 +60,7 @@ export const metadata = {
     ],
     apple: [{ url: '/apple-touch-icon.webp' }],
   },
+  manifest: '/manifest.webmanifest',
 };
 
 export const viewport = {

@@ -38,6 +38,8 @@ export function Textarea({
 }) {
   const isControlled = value !== undefined;
   const [inner, setInner] = useState(value ?? defaultValue ?? '');
+  // از rest حذف شود تا روی textarea هم value و هم defaultValue نرود
+  const { defaultValue: _dv, value: _v, onChange: _oc, ...safeRest } = rest;
 
   useEffect(() => {
     if (isControlled) setInner(value ?? '');
@@ -69,7 +71,6 @@ export function Textarea({
           'dark:bg-primary-950 dark:text-white dark:placeholder:text-white/40 dark:border-white/20 dark:hover:border-white/35',
           className
         )}
-        defaultValue={isControlled ? undefined : defaultValue}
         placeholder={placeholder || ''}
         disabled={disabled}
         style={{ minHeight: style?.minHeight ?? (rows ? undefined : fallbackMin), ...style }}
@@ -77,10 +78,10 @@ export function Textarea({
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="false"
+        ref={ref}
+        {...safeRest}
         value={isControlled ? (value ?? '') : inner}
         onChange={handleChange}
-        ref={ref}
-        {...rest}
       />
       {error ? <Error size={size === 'large' ? 'large' : 'small'}>{error}</Error> : null}
     </div>

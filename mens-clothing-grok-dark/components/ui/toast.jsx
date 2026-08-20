@@ -29,7 +29,8 @@ function getPalette(variant) {
       ? { bg: '#2E2348', border: '#DDD6FE', text: '#F5F3FF', icon: '#C4B5FD' }
       : { bg: '#EDE9FE', border: '#A78BFA', text: '#5B21B6', icon: '#7C3AED' },
   };
-  if (variant === 'warning' || variant === 'info') return map.default;
+  if (variant === 'warning') return map.error; // خطا و اخطار → قرمز پاستیلی
+  if (variant === 'info') return map.default;
   return map[variant] || map.default;
 }
 
@@ -86,9 +87,14 @@ const toastAnimation = {
   exit: { opacity: 0, y: -12, scale: 0.96 },
 };
 
+/** جلوگیری از دو بار آمدن همان پیام در فاصله کوتاه */
+const recentToastMap = new Map();
+const TOAST_DEDUP_MS = 2200;
+
 /**
  * Site-wide toast API — always top-center.
  * success → pastel green | error → pastel red | info/default → purple (no yellow)
+ * هر پیام یکتا فقط یک‌بار در بازهٔ کوتاه نشان داده می‌شود.
  */
 export function showToast({
   title,
@@ -98,11 +104,35 @@ export function showToast({
   position = 'top-center',
   actions,
   onDismiss,
+  id,
 } = {}) {
-  const v = variant === 'success' || variant === 'error' ? variant : 'default';
+  // success=سبز · error/warning=قرمز پاستیلی · info/default=بنفش
+  const v =
+    variant === 'success' ? 'success'
+    : (variant === 'error' || variant === 'warning') ? 'error'
+    : 'default';
   const pal = getPalette(v);
-  const text = message || title || '';
-  const showTitle = !!(title && message && title !== message);
+  // متن کامل، تک‌خطی (بدون برش با …)
+  const raw = String(message || title || '');
+  const text = raw.replace(/\s+/g, ' ').trim();
+  const titleClean = title ? String(title).replace(/\s+/g, ' ').trim() : '';
+  const showTitle = !!(titleClean && text && titleClean !== text);
+  const dedupeKey = id || `${v}::${String(title || '')}::${String(text)}`;
+  const now = Date.now();
+  const prev = recentToastMap.get(dedupeKey);
+  if (prev && now - prev < TOAST_DEDUP_MS) {
+    return prev;
+  }
+  recentToastMap.set(dedupeKey, now);
+  // پاکسازی کلیدهای قدیمی
+  if (recentToastMap.size > 40) {
+    for (const [k, t] of recentToastMap) {
+      if (now - t > TOAST_DEDUP_MS * 3) recentToastMap.delete(k);
+    }
+  }
+
+  // همان id باعث می‌شود sonner toast تکراری را جایگزین کند نه روی هم بچیند
+  const toastKey = dedupeKey.slice(0, 120);
 
   return sonnerToast.custom(
     (toastId) => (
@@ -112,7 +142,7 @@ export function showToast({
         animate="animate"
         exit="exit"
         transition={{ duration: 0.28, ease: 'easeOut' }}
-        className="flex items-center justify-between gap-2 w-auto max-w-[min(94vw,32rem)] px-3.5 py-2.5 rounded-2xl border shadow-lg"
+        className="flex items-center justify-between gap-2 w-max max-w-[min(96vw,42rem)] px-3.5 py-2.5 rounded-2xl border shadow-lg"
         style={{
           backgroundColor: pal.bg,
           borderColor: pal.border,
@@ -122,21 +152,21 @@ export function showToast({
         data-app-toast="1"
         data-toast-variant={v}
       >
-        <div className="flex items-center gap-2.5 min-w-0 overflow-hidden">
+        <div className="flex items-center gap-2.5 min-w-0">
           <IconSvg type={v === 'default' ? 'info' : v} color={pal.icon} size={16} />
-          <div className="min-w-0 text-right overflow-hidden">
+          <div className="min-w-0 text-right">
             {showTitle ? (
               <h3
-                className="text-xs font-bold leading-snug whitespace-nowrap overflow-hidden text-ellipsis"
+                className="text-[11px] sm:text-xs font-bold leading-none whitespace-nowrap"
                 style={{ color: pal.text }}
               >
-                {title}
+                {titleClean}
               </h3>
             ) : null}
             <p
               className={cn(
-                'text-xs leading-snug whitespace-nowrap overflow-hidden text-ellipsis font-medium',
-                showTitle ? 'mt-0.5 opacity-95' : ''
+                'text-[11px] sm:text-xs leading-none whitespace-nowrap font-medium',
+                showTitle ? 'mt-1 opacity-95' : ''
               )}
               style={{ color: pal.text }}
             >
@@ -173,7 +203,7 @@ export function showToast({
         </div>
       </motion.div>
     ),
-    { duration, position }
+    { duration, position, id: toastKey }
   );
 }
 

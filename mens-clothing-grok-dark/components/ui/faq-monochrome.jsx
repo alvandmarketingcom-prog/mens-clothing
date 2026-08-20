@@ -170,10 +170,14 @@ export function FAQMonochrome({
                       role="region"
                       aria-labelledby={buttonId}
                       className={`overflow-hidden text-xs sm:text-sm leading-relaxed transition-[max-height] duration-500 ease-out text-neutral-600 dark:text-neutral-400 ${
-                        open ? 'max-h-72' : 'max-h-0'
+                        open ? 'max-h-[32rem]' : 'max-h-0'
                       }`}
                     >
-                      <p className="pb-1 pl-1">{item.answer}</p>
+                      {/<[a-z][\s\S]*>/i.test(item.answer || '') ? (
+                        <div className="pb-1 pl-1 prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: item.answer }} />
+                      ) : (
+                        <p className="pb-1 pl-1">{item.answer}</p>
+                      )}
                     </div>
                   </div>
                 </button>

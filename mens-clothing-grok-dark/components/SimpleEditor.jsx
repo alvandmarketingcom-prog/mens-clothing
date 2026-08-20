@@ -39,6 +39,21 @@ function sanitizeHtml(html, { mode = 'restricted', allowTable = false } = {}) {
             if (n.startsWith('on') || n === 'href' || n === 'src' || n === 'xlink:href') {
               child.removeAttribute(attr.name);
             }
+            // فقط style رنگ متن مجاز (برای ابزار رنگ ادیتور)
+            if (n === 'style') {
+              const st = (attr.value || '').toLowerCase();
+              const m = st.match(/(?:^|;\s*)color\s*:\s*([^;]+)/);
+              if (m) {
+                const col = m[1].trim();
+                if (/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(col) || /^rgb\(/i.test(col) || /^[a-z]+$/i.test(col)) {
+                  child.setAttribute('style', `color: ${col}`);
+                } else {
+                  child.removeAttribute('style');
+                }
+              } else {
+                child.removeAttribute('style');
+              }
+            }
           });
         } else {
           // ادمین: فقط handlerهای خطرناک حذف شوند
@@ -102,6 +117,8 @@ export default function SimpleEditor({
   const ref = useRef(null);
   const lastValue = useRef('');
   const [htmlMode, setHtmlMode] = useState(false);
+  const [editorDialog, setEditorDialog] = useState(null);
+  // { title, defaultValue, resolve }
   const [htmlSource, setHtmlSource] = useState('');
   const initial = value != null && value !== '' ? value : defaultValue;
 
@@ -163,59 +180,80 @@ export default function SimpleEditor({
 
   const insertLink = () => {
     if (!isAdmin) return;
-    const url = window.prompt('آدرس لینک (https://…)', 'https://');
-    if (!url || !/^https?:\/\//i.test(url.trim())) {
-      if (url) alert('فقط لینک با http/https مجاز است');
-      return;
-    }
-    run('createLink', url.trim());
+    setEditorDialog({
+      title: 'آدرس لینک (https://…)',
+      defaultValue: 'https://',
+      resolve: (url) => {
+        if (!url) return;
+        if (!/^https?:\/\//i.test(url.trim())) {
+          setEditorDialog({
+            title: 'خطا',
+            message: 'فقط لینک با http/https مجاز است',
+            mode: 'alert',
+            resolve: () => {},
+          });
+          return;
+        }
+        run('createLink', url.trim());
+      },
+    });
   };
 
   const insertImage = () => {
     if (!isAdmin) return;
-    const url = window.prompt('آدرس تصویر (https://… یا data:image)', '');
-    if (!url) return;
-    if (!/^(https?:\/\/|data:image\/)/i.test(url.trim())) {
-      alert('آدرس تصویر معتبر نیست');
-      return;
-    }
-    try {
-      ref.current?.focus();
-      document.execCommand(
-        'insertHTML',
-        false,
-        `<img src="${url.trim().replace(/"/g, '')}" alt="" style="max-width:100%;height:auto;border-radius:8px;margin:8px 0;" />`
-      );
-      emit();
-    } catch (_) {}
+    setEditorDialog({
+      title: 'آدرس تصویر (https://… یا data:image)',
+      defaultValue: '',
+      resolve: (url) => {
+        if (!url) return;
+        if (!/^(https?:\/\/|data:image\/)/i.test(url.trim())) {
+          setEditorDialog({ title: 'خطا', message: 'آدرس تصویر معتبر نیست', mode: 'alert', resolve: () => {} });
+          return;
+        }
+        try {
+          ref.current?.focus();
+          document.execCommand(
+            'insertHTML',
+            false,
+            `<img src="${url.trim().replace(/"/g, '')}" alt="" style="max-width:100%;height:auto;border-radius:8px;margin:8px 0;" />`
+          );
+          emit();
+        } catch (_) {}
+      },
+    });
   };
 
-  const insertVideo = () => {
+    const insertVideo = () => {
     if (!isAdmin) return;
-    const url = (window.prompt('لینک ویدیو آپارات / یوتیوب یا embed URL', '') || '').trim();
-    if (!url) return;
-    let src = url;
-    // aparat share → embed
-    const ap = url.match(/aparat\.com\/v\/([\w-]+)/i);
-    if (ap) src = `https://www.aparat.com/video/video/embed/videohash/${ap[1]}/vt/frame`;
-    const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/i);
-    if (yt) src = `https://www.youtube.com/embed/${yt[1]}`;
-    if (!/^https:\/\//i.test(src)) {
-      alert('آدرس ویدیو معتبر نیست');
-      return;
-    }
-    try {
-      ref.current?.focus();
-      document.execCommand(
-        'insertHTML',
-        false,
-        `<div class="se-video"><iframe src="${src.replace(/"/g, '')}" title="video" allowfullscreen loading="lazy" style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px;"></iframe></div><p><br></p>`
-      );
-      emit();
-    } catch (_) {}
+    setEditorDialog({
+      title: 'لینک ویدیو آپارات / یوتیوب یا embed URL',
+      defaultValue: '',
+      resolve: (urlRaw) => {
+        const url = (urlRaw || '').trim();
+        if (!url) return;
+        let src = url;
+        const ap = url.match(/aparat\.com\/v\/([\w-]+)/i);
+        if (ap) src = `https://www.aparat.com/video/video/embed/videohash/${ap[1]}/vt/frame`;
+        const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/i);
+        if (yt) src = `https://www.youtube.com/embed/${yt[1]}`;
+        if (!/^https:\/\//i.test(src)) {
+          setEditorDialog({ title: 'خطا', message: 'آدرس ویدیو معتبر نیست', mode: 'alert', resolve: () => {} });
+          return;
+        }
+        try {
+          ref.current?.focus();
+          document.execCommand(
+            'insertHTML',
+            false,
+            `<div class="se-video"><iframe src="${src.replace(/"/g, '')}" title="video" allowfullscreen loading="lazy" style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px;"></iframe></div><p><br></p>`
+          );
+          emit();
+        } catch (_) {}
+      },
+    });
   };
 
-  const toggleHtmlMode = () => {
+const toggleHtmlMode = () => {
     if (!isAdmin) return;
     if (!htmlMode) {
       const current = ref.current?.innerHTML || value || '';
@@ -263,12 +301,45 @@ export default function SimpleEditor({
         : 'min-h-[160px]';
   const maxH = appearance === 'full' ? 'max-h-[min(65vh,560px)]' : 'max-h-[min(45vh,360px)]';
 
+  const applyHeading = (tag) => {
+    // formatBlock در مرورگرها گاهی به <h2> و گاهی h2 نیاز دارد
+    try {
+      ref.current?.focus();
+      const ok = document.execCommand('formatBlock', false, tag);
+      if (!ok) document.execCommand('formatBlock', false, `<${tag}>`);
+      emit();
+    } catch (_) {
+      run('formatBlock', tag);
+    }
+  };
+
+  const applyColor = (color) => {
+    try {
+      ref.current?.focus();
+      document.execCommand('styleWithCSS', false, true);
+      document.execCommand('foreColor', false, color);
+      emit();
+    } catch (_) {}
+  };
+
+  const TEXT_COLORS = [
+    { id: 'c-default', label: 'پیش‌فرض', value: '#111827' },
+    { id: 'c-gray', label: 'خاکستری', value: '#6B7280' },
+    { id: 'c-red', label: 'قرمز', value: '#DC2626' },
+    { id: 'c-orange', label: 'نارنجی', value: '#EA580C' },
+    { id: 'c-amber', label: 'کهربایی', value: '#D97706' },
+    { id: 'c-green', label: 'سبز', value: '#059669' },
+    { id: 'c-blue', label: 'آبی', value: '#2563EB' },
+    { id: 'c-indigo', label: 'نیلی', value: '#4F46E5' },
+    { id: 'c-purple', label: 'بنفش', value: '#7C3AED' },
+    { id: 'c-pink', label: 'صورتی', value: '#DB2777' },
+    { id: 'c-white', label: 'سفید', value: '#FFFFFF' },
+  ];
+
   const tools = [
-    { id: 'bold', label: 'ضخیم', cmd: () => run('bold') },
+    { id: 'bold', label: 'بولد', cmd: () => run('bold') },
     { id: 'italic', label: 'کج', cmd: () => run('italic') },
     { id: 'underline', label: 'زیرخط', cmd: () => run('underline') },
-    { id: 'h2', label: 'عنوان', cmd: () => run('formatBlock', 'h2') },
-    { id: 'p', label: 'پاراگراف', cmd: () => run('formatBlock', 'p') },
     { id: 'ul', label: 'فهرست', cmd: () => run('insertUnorderedList') },
     { id: 'ol', label: 'شماره', cmd: () => run('insertOrderedList') },
     { id: 'quote', label: 'نقل', cmd: () => run('formatBlock', 'blockquote') },
@@ -284,12 +355,112 @@ export default function SimpleEditor({
   }
 
   return (
+    <>
+
+      {editorDialog && (
+        <div className="site-modal-root" role="dialog" aria-modal="true">
+          <div className="absolute inset-0 bg-black/50" onClick={() => { const r = editorDialog.resolve; setEditorDialog(null); r?.(null); }} />
+          <div className="site-modal-panel bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-white/15 p-4 sm:p-5 space-y-3">
+            <h3 className="text-sm font-bold text-neutral-900 dark:text-white text-right">{editorDialog.title}</h3>
+            {editorDialog.message ? (
+              <p className="text-sm text-neutral-600 dark:text-white/80 text-right">{editorDialog.message}</p>
+            ) : null}
+            {editorDialog.mode !== 'alert' && (
+              <input
+                id="se-dialog-input"
+                autoFocus
+                defaultValue={editorDialog.defaultValue || ''}
+                dir="ltr"
+                className="w-full px-3 py-2.5 rounded-xl border border-neutral-200 dark:border-white/20 bg-transparent text-sm text-left text-neutral-900 dark:text-white"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const v = e.currentTarget.value;
+                    const r = editorDialog.resolve;
+                    setEditorDialog(null);
+                    r?.(v);
+                  }
+                  if (e.key === 'Escape') {
+                    const r = editorDialog.resolve;
+                    setEditorDialog(null);
+                    r?.(null);
+                  }
+                }}
+              />
+            )}
+            <div className="flex gap-2 justify-start">
+              <button
+                type="button"
+                className="px-5 py-2 rounded-full bg-blue-600 text-white text-sm font-medium"
+                onClick={() => {
+                  if (editorDialog.mode === 'alert') {
+                    const r = editorDialog.resolve;
+                    setEditorDialog(null);
+                    r?.(null);
+                    return;
+                  }
+                  const el = document.getElementById('se-dialog-input');
+                  const v = el?.value || '';
+                  const r = editorDialog.resolve;
+                  setEditorDialog(null);
+                  r?.(v);
+                }}
+              >
+                تأیید
+              </button>
+              {editorDialog.mode !== 'alert' && (
+                <button
+                  type="button"
+                  className="px-5 py-2 rounded-full border border-neutral-200 dark:border-white/30 text-sm"
+                  onClick={() => {
+                    const r = editorDialog.resolve;
+                    setEditorDialog(null);
+                    r?.(null);
+                  }}
+                >
+                  انصراف
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     <div
       className={`simple-editor rounded-xl border border-primary-200 dark:border-white/20 bg-white dark:bg-primary-950 overflow-hidden ${className}`}
       data-appearance={appearance}
       data-mode={mode}
     >
-      <div className="flex flex-wrap gap-1 px-2 py-1.5 border-b border-primary-100 dark:border-white/10 bg-primary-50/80 dark:bg-primary-900/50">
+      <div className="flex flex-wrap items-center gap-1 px-2 py-1.5 border-b border-primary-100 dark:border-white/10 bg-primary-50/80 dark:bg-primary-900/50">
+        {/* سلسله‌مراتب هدینگ */}
+        <label className="inline-flex items-center gap-1 text-xs text-primary-600 dark:text-white/80">
+          <span className="sr-only">هدینگ</span>
+          <select
+            aria-label="سطح عنوان"
+            defaultValue=""
+            onMouseDown={(e) => e.stopPropagation()}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (!v) return;
+              applyHeading(v);
+              e.target.value = '';
+            }}
+            className="px-2 py-1 rounded-lg text-xs font-medium bg-white dark:bg-primary-800 border border-primary-200 dark:border-white/20 text-primary-800 dark:text-white outline-none cursor-pointer max-w-[7.5rem]"
+          >
+            <option value="" disabled>
+              هدینگ…
+            </option>
+            <option value="p">پاراگراف</option>
+            <option value="h1">H1 · عنوان اصلی</option>
+            <option value="h2">H2 · عنوان</option>
+            <option value="h3">H3 · زیرعنوان</option>
+            <option value="h4">H4 · کوچک</option>
+            <option value="h5">H5</option>
+            <option value="h6">H6</option>
+          </select>
+        </label>
+
+        {/* بولد و سایر */}
         {tools.map((t) => (
           <button
             key={t.id}
@@ -300,7 +471,9 @@ export default function SimpleEditor({
               t.cmd();
             }}
             className={`px-2 py-1 rounded-lg text-xs font-medium transition ${
-              t.id === 'html' && htmlMode
+              t.id === 'bold'
+                ? 'font-bold text-primary-900 dark:text-white hover:bg-primary-100 dark:hover:bg-primary-800'
+                : t.id === 'html' && htmlMode
                 ? 'bg-[#FF6B35] text-white'
                 : 'text-primary-700 dark:text-white/90 hover:bg-primary-100 dark:hover:bg-primary-800'
             }`}
@@ -308,6 +481,25 @@ export default function SimpleEditor({
             {t.label}
           </button>
         ))}
+
+        {/* پالت رنگ متن */}
+        <div className="inline-flex items-center gap-0.5 px-1 py-0.5 rounded-lg border border-primary-200 dark:border-white/15 bg-white/80 dark:bg-primary-800/80" title="رنگ متن">
+          {TEXT_COLORS.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              title={c.label}
+              aria-label={`رنگ ${c.label}`}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                applyColor(c.value);
+              }}
+              className="color-swatch se-text-color-swatch w-4 h-4 rounded-full border border-black/15 dark:border-white/50 hover:scale-110 transition shrink-0"
+              style={{ ["--swatch-color"]: c.value, backgroundColor: c.value }}
+            />
+          ))}
+        </div>
+
         <span className="mr-auto text-xs text-primary-400 dark:text-white/40 self-center px-1">
           {isAdmin ? 'ادمین · لینک / HTML / رسانه' : 'بدون لینک و رسانه'}
         </span>
@@ -341,6 +533,7 @@ export default function SimpleEditor({
         />
       )}
     </div>
+    </>
   );
 }
 

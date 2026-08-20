@@ -1,39 +1,84 @@
-# پیراهن مردانه + Cinematic Hero
+# پیراهن مردانه | PIRAHANMARDANE.IR
 
-فروشگاه کامل Next.js با هیرو اسکراب‌اسکرول (FORM & THREAD style).
+فروشگاه Next.js (App Router) — پنل خریدار / فروشنده / ادمین، سئو، آنالیتیکس.
 
-## اجرا محلی
+## نیازمندی
+
+- Node.js **18.18+** (پیشنهادی: ۲۰ LTS)
+- npm
+
+## اجرای محلی
 
 ```bash
 npm install
 npm run dev
 ```
 
-http://localhost:3000
+آدرس: [http://localhost:3000](http://localhost:3000)
+
+```bash
+npm run build
+npm start
+```
+
+## GitHub
+
+از ریشه‌ای که `package.json` دارد:
+
+```bash
+git init
+git add .
+git commit -m "Initial commit: mens clothing store frontend"
+git branch -M main
+git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+git push -u origin main
+```
+
+> `node_modules` و `.next` با `.gitignore` نادیده گرفته می‌شوند.
 
 ## دیپلوی روی Vercel
 
-1. پروژه را از پوشه‌ای که **`package.json`** داخلش است آپلود/ایمپورت کنید (اگر زیپ را باز کردید، Root Directory = `project`).
-2. Framework Preset: **Next.js** (خودکار تشخیص داده می‌شود).
-3. Build Command: `next build` — Install: `npm install`
-4. بعد از دیپلوی موفق، URL پیش‌فرض `*.vercel.app` را باز کنید.
+### از GitHub (پیشنهادی)
 
-اگر صفحه **`404: NOT_FOUND` با Code: NOT_FOUND و ID مثل `lhr1::...`** دیدید:
-- این خطای **پلتفرم Vercel** است (دیپلوی پیدا نشده)، نه ۴۰۴ داخل اپ.
-- در داشبورد Vercel بررسی کنید دیپلوی **Ready** باشد و حذف/منقضی نشده باشد.
-- Root Directory را درست تنظیم کنید.
-- دامنه سفارشی را دوباره به دیپلوی فعلی وصل کنید.
-- یک Redeploy بزنید.
+1. [vercel.com](https://vercel.com) → ورود با GitHub  
+2. **Add New Project** → Import ریپو  
+3. تنظیمات:
+   - Framework: **Next.js**
+   - Root Directory: `.` (ریشه ریپو)
+   - Build Command: `next build` (پیش‌فرض)
+   - Install Command: `npm install` (پیش‌فرض)
+   - Node: از `.nvmrc` → **20**
+4. **Deploy**
 
-## هیرو
+بعد از هر `git push` روی `main`، دیپلوی خودکار انجام می‌شود.
 
-- `components/Hero.jsx` — sticky video / فریم موبایل
-- `components/App.jsx` — کل UI فروشگاه
-- `app/` — App Router + `not-found.jsx`
-- `public/sw.js` — PWA و پوش
+### دامنه
 
-## PWA
+Vercel → Project → **Settings → Domains** → دامنه را اضافه و DNS را تنظیم کنید.
 
-- مانیفست: `public/manifest.webmanifest`
-- Service Worker: `public/sw.js`
-- نصب وب‌اپ از پروفایل خریدار
+### نکته ۴۰۴ پلتفرم Vercel
+
+اگر خود Vercel `NOT_FOUND` داد (نه ۴۰۴ داخل سایت):
+
+- وضعیت دیپلوی باید **Ready** باشد  
+- Root Directory درست باشد  
+- یک **Redeploy** بزنید  
+
+## ساختار
+
+| مسیر | توضیح |
+|------|--------|
+| `app/` | App Router، API، sitemap، robots |
+| `components/` | UI فروشگاه، هیرو، پنل‌ها |
+| `public/` | استاتیک، PWA، ریدایرکت |
+| `middleware.js` | ریدایرکت سمت سرور |
+| `vercel.json` | تنظیمات Vercel |
+
+## اسکریپت‌ها
+
+| دستور | کار |
+|--------|-----|
+| `npm run dev` | توسعه |
+| `npm run build` | بیلد تولید |
+| `npm start` | اجرای بیلد |
+| `npm run qa` | چک سبک فرانت |

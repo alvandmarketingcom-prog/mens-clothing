@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:e2e": "playwright test",
+    "test:e2e:install": "playwright install chromium",
+    "test:unit": "node scripts/test-stores.mjs",
+    "test": "npm run test:unit && npm run qa",
+    "test:budget": "node scripts/check-budget.mjs",
+    "qa": "node scripts/qa-frontend.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",
@@ -19,7 +25,11 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "@playwright/test": "^1.49.0"
   },
-  "description": "فروشگاه پیراهن مردانه"
+  "description": "فروشگاه پیراهن مردانه",
+  "engines": {
+    "node": ">=18.18.0"
+  }
 }

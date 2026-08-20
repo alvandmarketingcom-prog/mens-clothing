@@ -59,9 +59,9 @@ export function Breadcrumb({
   if (!crumbs.length) return null;
 
   return (
-    <nav className={`w-full ${className}`} aria-label="breadcrumb">
+    <nav className={`w-full border-t border-b border-primary-200 dark:border-white/20 ${className}`} aria-label="breadcrumb" dir="rtl">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3">
-        <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-1 text-sm text-primary-500 dark:text-white/55 font-medium">
+        <div className="flex flex-wrap justify-start items-center gap-x-2 gap-y-1 text-sm text-primary-500 dark:text-white/55 font-medium text-right">
           {typeof homeOnClick === 'function' && (
             <>
               <button

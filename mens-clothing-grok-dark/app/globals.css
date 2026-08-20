@@ -1,3 +1,23 @@
+
+/* Design tokens — mirror current palette (no visual change) */
+:root {
+  --pm-bg: #f5f5f7;
+  --pm-bg-elevated: #ffffff;
+  --pm-fg: #1d1d1f;
+  --pm-fg-muted: #6e6e73;
+  --pm-border: rgba(0, 0, 0, 0.08);
+  --pm-accent: #0071e3;
+  --pm-radius: 1rem;
+  --pm-font: "YekanBakh", "Yekan Bakh", "PiranUI", Inter, "Noto Sans", system-ui, sans-serif;
+}
+html.dark {
+  --pm-bg: #0a0a0a;
+  --pm-bg-elevated: #1a1c20;
+  --pm-fg: #ffffff;
+  --pm-fg-muted: rgba(255, 255, 255, 0.65);
+  --pm-border: rgba(255, 255, 255, 0.15);
+  --pm-accent: #ff6b35;
+}
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -161,28 +181,32 @@ button, a, span, p, label, li, td, th {
 }
 
 
-/* ========== Unified type scale (sizes only) ========== */
-h1 { font-size: 1.25rem; line-height: 1.3; }
-h2 { font-size: 1.125rem; line-height: 1.35; }
-h3 { font-size: 1rem; line-height: 1.4; }
-h4 { font-size: 0.875rem; line-height: 1.45; }
+/* ========== Unified type scale (sizes only) — headings 2x ========== */
+h1 { font-size: 2.5rem; line-height: 1.25; }
+h2 { font-size: 2.25rem; line-height: 1.3; }
+h3 { font-size: 2rem; line-height: 1.35; }
+h4 { font-size: 1.75rem; line-height: 1.4; }
+h5 { font-size: 1.5rem; line-height: 1.4; }
+h6 { font-size: 1.25rem; line-height: 1.45; }
 @media (min-width: 640px) {
-  h1 { font-size: 1.5rem; }
-  h2 { font-size: 1.25rem; }
-  h3 { font-size: 1rem; }
-  h4 { font-size: 0.875rem; }
+  h1 { font-size: 3rem; }
+  h2 { font-size: 2.5rem; }
+  h3 { font-size: 2rem; }
+  h4 { font-size: 1.75rem; }
+  h5 { font-size: 1.5rem; }
+  h6 { font-size: 1.25rem; }
 }
-h1,h2,h3,h4,.font-bold,.font-extrabold { font-weight: 700; }
+h1,h2,h3,h4,h5,h6,.font-bold,.font-extrabold { font-weight: 700; }
 .font-medium { font-weight: 500; }
 .font-black, .font-extrablack { font-weight: 950; }
 .section-title {
   font-weight: 950 !important;
   letter-spacing: -0.01em;
-  font-size: 1.125rem;
-  line-height: 1.35;
+  font-size: 2.25rem;
+  line-height: 1.3;
 }
 @media (min-width: 640px) {
-  .section-title { font-size: 1.25rem; }
+  .section-title { font-size: 2.5rem; }
 }
 body {
   font-size: 0.875rem !important;
@@ -269,23 +293,45 @@ button {
   color: inherit;
 }
 
-/* ========== Buttons — Apple continuous corners (squircle) ONLY on buttons ========== */
-button:not([class*="overflow-hidden"]):not(.product-card):not(.no-pill),
-[type="button"]:not([class*="overflow-hidden"]):not(.no-pill),
-[type="submit"]:not(.no-pill),
-[type="reset"]:not(.no-pill),
-[role="button"]:not([class*="overflow-hidden"]):not(.no-pill),
+/* ========== گوشه‌ها: بدون شکل کپسولی (pill) در سراسر سایت ==========
+   دکمه‌ها و بلوک‌های کلیک‌پذیر: گوشه نرم ۱۲px
+   فقط آیکون‌دکمه‌های مربعی کوچک دایره می‌مانند */
+button:not([class*="overflow-hidden"]):not(.product-card),
+[type="button"]:not([class*="overflow-hidden"]),
+[type="submit"],
+[type="reset"],
+[role="button"]:not([class*="overflow-hidden"]),
 a.bg-apple-blue,
 a[class*="bg-apple-blue"],
 .header-icon-btn,
 .seller-rank-tab,
 .size-chip,
 .seller-follow-off,
-.seller-follow-on {
+.seller-follow-on,
+.hero-shop-btn {
+  border-radius: 12px !important;
+  corner-shape: initial !important;
+  -webkit-corner-shape: initial !important;
+}
+
+/* آیکون‌دکمه مربعی — دایره مجاز */
+button.rounded-full.w-8,
+button.rounded-full.w-9,
+button.rounded-full.w-10,
+button.rounded-full.w-11,
+button.w-8.h-8.rounded-full,
+button.w-9.h-9.rounded-full,
+button.w-10.h-10.rounded-full,
+button.w-11.h-11.rounded-full,
+.header-icon-btn.rounded-full {
   border-radius: 9999px !important;
-  /* Apple squircle — supported in Safari/Chromium; ignored elsewhere */
-  corner-shape: continuous;
-  -webkit-corner-shape: continuous;
+}
+
+/* ردیف/کارت تمام‌عرض هرگز کپسول نشود */
+button.w-full,
+[role="button"].w-full,
+button[class*="w-full"] {
+  border-radius: 12px !important;
 }
 
 /* Primary filled (white in dark) */
@@ -365,7 +411,7 @@ html.dark {
 }
 .dark .text-primary-400,
 .dark .text-primary-500 {
-  color: #7D8187 !important;
+  color: #B0B4BA !important;
 }
 .dark .text-white {
   color: #FFFFFF !important;
@@ -511,7 +557,10 @@ html.lenis body {
 /* GSAP pin-spacer: keep dark so no white flash under pinned hero on mobile */
 .pin-spacer {
   background-color: #0A0A0A !important;
-  z-index: auto !important;
+  z-index: 0 !important;
+}
+header[data-home-hero-header="1"] {
+  isolation: isolate;
 }
 
 .hero-video {
@@ -651,7 +700,7 @@ html.lenis body {
   align-items: center;
   justify-content: center;
   padding: 0.55rem 1.6rem;
-  border-radius: 9999px;
+  border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.85);
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(8px);
@@ -888,4 +937,1184 @@ html.lenis body {
 }
 .hero-load-gate {
   z-index: 99999 !important;
+}
+
+
+/* Product card Add button — hover */
+/* روشن: آبی کمی تیره‌تر + متن سفید (نه مشکی) */
+.product-add-btn:hover,
+.product-add-btn:focus-visible {
+  background-color: #1D4ED8 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: transparent !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+.product-add-btn:hover svg,
+.product-add-btn:focus-visible svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+/* دارک: زمینه #1A1C20 + متن نارنجی + بردر سفید */
+.dark .product-add-btn:hover,
+.dark .product-add-btn:focus-visible {
+  background-color: #1A1C20 !important;
+  color: #FF6B35 !important;
+  -webkit-text-fill-color: #FF6B35 !important;
+  border-color: #FFFFFF !important;
+}
+.dark .product-add-btn:hover svg,
+.dark .product-add-btn:focus-visible svg {
+  color: #FF6B35 !important;
+  stroke: #FF6B35 !important;
+}
+
+
+
+/* Side drawer dim overlay — soft, never a solid black header strip */
+.cart-overlay {
+  background: rgba(15, 15, 15, 0.28);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+/* وقتی ستون کناری باز است هدر همیشه خوانا و بالای overlay */
+header[data-home-hero-header="1"].sticky {
+  isolation: isolate;
+}
+
+/* ستون کناری همیشه بالای هدر — هدر زیر ستون می‌ماند */
+.cart-panel {
+  z-index: 200 !important;
+}
+header[data-home-hero-header="1"] {
+  z-index: 100;
+}
+.cart-overlay {
+  z-index: 90 !important;
+}
+
+/* خلاصه سفارش — sticky فقط وقتی والد ارتفاع کامل ردیف گرید را دارد */
+@media (min-width: 1024px) {
+  .order-summary-sticky {
+    position: sticky !important;
+    top: 7rem !important; /* زیر هدر */
+    align-self: flex-start;
+  }
+}
+
+/* پنل ادمین — زیر هدر سایت، بدون پوشش fixed */
+.admin-panel-shell {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* سطوح کارت پنل: روشن سفید · دارک primary-900 (کنتراست با پس‌زمینه 950) */
+.admin-panel-shell .flex-1.min-w-0,
+.seller-panel-surface {
+  /* wrapper already set in JSX */
+}
+
+
+/* دکمه اعمال کد تخفیف: در دارک متن تیره روی پس‌زمینه سفید — فقط همین دکمه */
+.dark .coupon-apply-btn,
+html.dark .coupon-apply-btn,
+html.dark button.coupon-apply-btn {
+  background-color: #FFFFFF !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+/* light mode: white text on dark apply btn */
+html:not(.dark) .coupon-apply-btn,
+html:not(.dark) button.coupon-apply-btn {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+.dark .coupon-apply-btn:hover,
+html.dark button.coupon-apply-btn:hover {
+  background-color: #E8E8E8 !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+
+/* (replaced by html.dark outline chip rules below) */
+
+
+/* ===== Readable hover: white CTAs + product badges ===== */
+.offer-view-all-btn,
+a.offer-view-all-btn {
+  background-color: #FFFFFF !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  border-color: #FFFFFF !important;
+}
+.offer-view-all-btn:hover,
+.offer-view-all-btn:focus-visible,
+a.offer-view-all-btn:hover {
+  background-color: #F3F4F6 !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  border-color: #E5E7EB !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+.offer-view-all-btn svg,
+.offer-view-all-btn:hover svg {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+}
+.dark .offer-view-all-btn,
+.dark a.offer-view-all-btn,
+.dark .offer-view-all-btn:hover {
+  background-color: #FFFFFF !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+.dark .offer-view-all-btn:hover {
+  background-color: #F3F4F6 !important;
+}
+.dark .offer-view-all-btn svg,
+.dark .offer-view-all-btn:hover svg {
+  color: #0A0A0A !important;
+  stroke: #0A0A0A !important;
+}
+.seller-banner-cta,
+button.seller-banner-cta {
+  background-color: #FF6B35 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #FF6B35 !important;
+}
+.seller-banner-cta:hover,
+.seller-banner-cta:focus-visible,
+button.seller-banner-cta:hover {
+  background-color: #FF8F6B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #FF8F6B !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+.seller-banner-cta svg,
+.seller-banner-cta:hover svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+.dark .seller-banner-cta,
+.dark button.seller-banner-cta,
+.dark .seller-banner-cta:hover {
+  background-color: #FF6B35 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #FF6B35 !important;
+}
+.dark .seller-banner-cta:hover {
+  background-color: #FF8F6B !important;
+}
+.dark .seller-banner-cta svg,
+.dark .seller-banner-cta:hover svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Product card seller/category badges — high contrast + readable hover */
+.product-seller-badge,
+.product-category-badge {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+.dark .product-seller-badge,
+.dark .product-category-badge {
+  background-color: #374151 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.3) !important;
+}
+.product-seller-badge:hover,
+.product-category-badge:hover {
+  background-color: #E5E7EB !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+.dark .product-seller-badge:hover,
+.dark .product-category-badge:hover {
+  background-color: #4B5563 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255,255,255,0.45) !important;
+}
+
+
+/* Trust icons — visible circle bg + border in dark */
+.trust-icon-wrap {
+  background-color: #F3F4F6;
+  border: 1px solid #D1D5DB;
+}
+.dark .trust-icon-wrap {
+  background-color: #2A2C30 !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+.dark .trust-icon-wrap svg {
+  color: #FF6B35 !important;
+  stroke: #FF6B35 !important;
+}
+
+
+/* Checkout stepper — readable in dark mode */
+.checkout-step-chip--todo {
+  background-color: #F3F4F6;
+  color: #1F2937 !important;
+  -webkit-text-fill-color: #1F2937 !important;
+  border-color: #D1D5DB;
+}
+.dark .checkout-step-chip--todo {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+.dark .checkout-step-chip--todo .checkout-step-num {
+  background-color: #3F3F46 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+/* Completed checkout steps — green */
+.checkout-step-chip--done {
+  background-color: #D1FAE5 !important;
+  color: #065F46 !important;
+  -webkit-text-fill-color: #065F46 !important;
+  border-color: #34D399 !important;
+}
+.checkout-step-chip--done .checkout-step-num {
+  background-color: #10B981 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #059669 !important;
+}
+.dark .checkout-step-chip--done {
+  background-color: #14532D !important;
+  color: #D1FAE5 !important;
+  -webkit-text-fill-color: #D1FAE5 !important;
+  border-color: #34D399 !important;
+}
+.dark .checkout-step-chip--done .checkout-step-num {
+  background-color: #10B981 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #6EE7B7 !important;
+}
+.dark .checkout-step-chip--active {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+
+/* Compare page — add all button readable (only this button) */
+.compare-add-all-btn,
+html:not(.dark) .compare-add-all-btn,
+html:not(.dark) button.compare-add-all-btn {
+  background-color: #0071E3 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #0071E3 !important;
+}
+.dark .compare-add-all-btn,
+html.dark .compare-add-all-btn,
+html.dark button.compare-add-all-btn {
+  background-color: #FFFFFF !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  border-color: #FFFFFF !important;
+}
+.dark .compare-add-all-btn:hover,
+html.dark button.compare-add-all-btn:hover {
+  background-color: #E8E8E8 !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+
+
+/* Seller gifts secondary button — readable text in dark */
+.seller-gift-secondary-btn {
+  background-color: #FFFFFF !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  border: 1px solid #D1D5DB !important;
+}
+.seller-gift-secondary-btn svg {
+  color: #111827 !important;
+  stroke: #111827 !important;
+}
+.dark .seller-gift-secondary-btn {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+.dark .seller-gift-secondary-btn svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+.dark .seller-gift-secondary-btn:hover {
+  border-color: #FF6B35 !important;
+}
+
+
+/* SimpleEditor — heading hierarchy & colored text */
+.simple-editor-surface h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin: 0.6em 0 0.35em;
+}
+.simple-editor-surface h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0.55em 0 0.3em;
+}
+.simple-editor-surface h3 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0.5em 0 0.25em;
+}
+.simple-editor-surface h4 {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0.45em 0 0.2em;
+}
+.simple-editor-surface h5,
+.simple-editor-surface h6 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0.4em 0 0.2em;
+}
+.simple-editor-surface p {
+  margin: 0.35em 0;
+}
+.simple-editor-surface blockquote {
+  border-right: 3px solid #FF6B35;
+  padding-right: 0.75rem;
+  margin: 0.5em 0;
+  opacity: 0.9;
+}
+.simple-editor-surface strong,
+.simple-editor-surface b {
+  font-weight: 700;
+}
+
+
+/* Drawer secondary actions — readable in dark */
+.drawer-secondary-btn {
+  background-color: #FFFFFF !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  border: 1px solid #D1D5DB !important;
+}
+.dark .drawer-secondary-btn {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+.dark .drawer-secondary-btn:hover {
+  background-color: #35373C !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+
+/* Seller panel header actions */
+.seller-header-btn {
+  background-color: #FFFFFF !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  border: 1px solid #D1D5DB !important;
+}
+.seller-header-btn svg {
+  color: #111827 !important;
+  stroke: #111827 !important;
+}
+.dark .seller-header-btn {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+.dark .seller-header-btn svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+.seller-logout-btn {
+  background-color: transparent !important;
+  color: #DC2626 !important;
+  -webkit-text-fill-color: #DC2626 !important;
+  border: 1px solid #FCA5A5 !important;
+}
+.seller-logout-btn svg {
+  color: #DC2626 !important;
+  stroke: #DC2626 !important;
+}
+.dark .seller-logout-btn {
+  background-color: rgba(127, 29, 29, 0.25) !important;
+  color: #FCA5A5 !important;
+  -webkit-text-fill-color: #FCA5A5 !important;
+  border: 1px solid rgba(248, 113, 113, 0.7) !important;
+}
+.dark .seller-logout-btn svg {
+  color: #FCA5A5 !important;
+  stroke: #FCA5A5 !important;
+}
+
+
+/* Search dropdown trend / recent chips */
+.search-trend-chip {
+  background-color: #FFFFFF !important;
+  color: #1F2937 !important;
+  -webkit-text-fill-color: #1F2937 !important;
+  border: 1px solid #D1D5DB !important;
+}
+.dark .search-trend-chip {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+.dark .search-trend-chip:hover {
+  border-color: #FF6B35 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+
+/* PLP / filter chips — readable in dark */
+.plp-filter-chip {
+  background-color: #FFFFFF !important;
+  color: #1F2937 !important;
+  -webkit-text-fill-color: #1F2937 !important;
+  border-color: #D1D5DB !important;
+}
+.dark .plp-filter-chip {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.45) !important;
+}
+.dark .plp-filter-chip:hover {
+  border-color: #FF6B35 !important;
+}
+
+/* Coupon input readability */
+.coupon-input {
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+.coupon-input::placeholder {
+  color: #6B7280 !important;
+  -webkit-text-fill-color: #6B7280 !important;
+  opacity: 1 !important;
+}
+.dark .coupon-input {
+  background-color: #1A1C20 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+.dark .coupon-input::placeholder {
+  color: rgba(255, 255, 255, 0.72) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.72) !important;
+  opacity: 1 !important;
+}
+
+/* PLP filter aside section titles */
+.dark .plp-filter-aside p.text-xs.font-bold,
+.dark .plp-mobile-filters p.text-xs.font-bold {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+
+/* Fallback: unselected chips inside filter panels */
+.dark .plp-filter-aside button.rounded-full:not([class*="bg-apple"]):not([class*="bg-sky"]):not([class*="bg-emerald"]):not([class*="bg-amber"]):not([class*="bg-primary-800"]):not([class*="bg-\[#FF6B35\]"]):not(.color-swatch),
+.dark .plp-mobile-filters button.rounded-full:not([class*="bg-apple"]):not([class*="bg-sky"]):not([class*="bg-emerald"]):not([class*="bg-amber"]) {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* ========== Dark mode: outline / chip buttons readable ========== */
+html.dark button.border:not([class*="bg-apple-blue"]):not([class*="bg-[#FF6B35]"]):not([class*="bg-\[\#FF6B35\]"]):not(.bg-apple-blue):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-sky-"]):not([class*="bg-amber-"]):not([class*="bg-green-"]):not(.seller-rank-tab--active):not(.plp-chip--on):not(.search-filter-chip--on):not(.seller-banner-cta):not(.offer-view-all-btn):not(.plp-toggle-on):not(.color-swatch):not(.seller-follow-on),
+html.dark [type="button"].border:not([class*="bg-apple-blue"]):not([class*="bg-[#FF6B35]"]):not([class*="bg-\[\#FF6B35\]"]):not(.bg-apple-blue):not([class*="bg-red-"]):not([class*="bg-emerald-"]):not([class*="bg-sky-"]):not(.seller-banner-cta):not(.offer-view-all-btn):not(.plp-toggle-on):not(.color-swatch):not(.seller-follow-on),
+html.dark a.border.rounded-full:not([class*="bg-apple"]):not([class*="bg-[#FF6B35]"]):not(.seller-banner-cta):not(.offer-view-all-btn):not(.plp-toggle-on):not(.color-swatch):not(.seller-follow-on) {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+html.dark button.border:not([class*="bg-apple-blue"]):not([class*="bg-[#FF6B35]"]):not([class*="bg-\[\#FF6B35\]"]):not(.bg-apple-blue) svg,
+html.dark [type="button"].border:not([class*="bg-apple-blue"]):not([class*="bg-[#FF6B35]"]) svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+/* Logout / danger outline stays red-readable */
+html.dark button.border-red-200,
+html.dark button.border-red-300,
+html.dark button.border-red-400,
+html.dark button[class*="border-red-"] {
+  background-color: rgba(127, 29, 29, 0.35) !important;
+  color: #FCA5A5 !important;
+  -webkit-text-fill-color: #FCA5A5 !important;
+  border-color: rgba(248, 113, 113, 0.75) !important;
+}
+html.dark button[class*="border-red-"] svg {
+  color: #FCA5A5 !important;
+  stroke: #FCA5A5 !important;
+}
+
+/* Filled primary accents stay white text */
+html.dark button.bg-apple-blue,
+html.dark button[class*="bg-[#FF6B35]"],
+html.dark button[class*="bg-\[\#FF6B35\]"],
+html.dark a.bg-apple-blue {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* Inputs + placeholders globally in dark */
+html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+html.dark textarea,
+html.dark select {
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  background-color: #1A1C20 !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.7) !important;
+  opacity: 1 !important;
+}
+
+/* Secondary full-width outline buttons (ادامه خرید etc.) */
+html.dark button.w-full.border:not(.bg-apple-blue):not([class*="bg-[#FF6B35]"]):not([class*="bg-\[\#FF6B35\]"]):not([class*="bg-red-"]) {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+
+/* Footer social icons — readable default + hover (only these) */
+.social-icon-btn,
+html:not(.dark) a.social-icon-btn {
+  background-color: #F3F4F6 !important;
+  color: #111827 !important;
+  -webkit-text-fill-color: #111827 !important;
+  border: 1px solid #D1D5DB !important;
+}
+.social-icon-btn svg,
+html:not(.dark) a.social-icon-btn svg {
+  color: #111827 !important;
+  stroke: #111827 !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+.dark .social-icon-btn,
+html.dark a.social-icon-btn {
+  background-color: #2A2C30 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+}
+.dark .social-icon-btn svg,
+html.dark a.social-icon-btn svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+/* Hover: high contrast */
+.social-icon-btn:hover,
+.social-icon-btn:focus-visible,
+html:not(.dark) a.social-icon-btn:hover,
+html:not(.dark) a.social-icon-btn:focus-visible {
+  background-color: #FF6B35 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #FF6B35 !important;
+}
+.social-icon-btn:hover svg,
+.social-icon-btn:focus-visible svg,
+html:not(.dark) a.social-icon-btn:hover svg,
+html:not(.dark) a.social-icon-btn:focus-visible svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+.dark .social-icon-btn:hover,
+.dark .social-icon-btn:focus-visible,
+html.dark a.social-icon-btn:hover,
+html.dark a.social-icon-btn:focus-visible {
+  background-color: #FF6B35 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #FF6B35 !important;
+}
+.dark .social-icon-btn:hover svg,
+.dark .social-icon-btn:focus-visible svg,
+html.dark a.social-icon-btn:hover svg,
+html.dark a.social-icon-btn:focus-visible svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+
+/* ========== Selected states = pastel (light + dark, site-wide) ========== */
+/* Default selected (tabs / chips / filters) — warm peach */
+html:not(.dark) .search-filter-chip--on,
+html:not(.dark) button.search-filter-chip--on,
+html:not(.dark) .plp-chip--on,
+html:not(.dark) button.plp-chip--on,
+html:not(.dark) .seller-rank-tab--active,
+html:not(.dark) button.seller-rank-tab--active,
+html:not(.dark) .size-chip--active,
+html:not(.dark) button.size-chip--active,
+html:not(.dark) .plp-filter-chip--on,
+html:not(.dark) button.plp-filter-chip--on,
+html:not(.dark) button.plp-toggle-on {
+  background-color: #FDE8DF !important;
+  border-color: #E8A990 !important;
+  color: #7A3E2A !important;
+  -webkit-text-fill-color: #7A3E2A !important;
+  font-weight: 600 !important;
+  box-shadow: 0 0 0 1px rgba(232, 169, 144, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+/* Sky / stock selected — blue pastel */
+html:not(.dark) button.plp-toggle-on--sky {
+  background-color: #E0F2FE !important;
+  border-color: #7DD3FC !important;
+  color: #0C4A6E !important;
+  -webkit-text-fill-color: #0C4A6E !important;
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+/* Emerald / fast-ship / success selected — green pastel */
+html:not(.dark) button.plp-toggle-on--emerald {
+  background-color: #D1FAE5 !important;
+  border-color: #6EE7B7 !important;
+  color: #065F46 !important;
+  -webkit-text-fill-color: #065F46 !important;
+  box-shadow: 0 0 0 1px rgba(110, 231, 183, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+/* Light: solid primary-800 / orange chip selected → peach pastel */
+html:not(.dark) button.rounded-full.bg-primary-800.border-primary-800,
+html:not(.dark) button.rounded-lg.bg-primary-800.border-primary-800,
+html:not(.dark) button.rounded-full.bg-\[\#FF6B35\],
+html:not(.dark) button.rounded-lg.bg-\[\#FF6B35\],
+html:not(.dark) button[class*="bg-[#FF6B35]"].rounded-full:not(.seller-banner-cta):not(.offer-view-all-btn):not(.seller-form-primary-btn):not(.hero-shop-btn),
+html:not(.dark) button[class*="bg-\[\#FF6B35\]"].rounded-full:not(.seller-banner-cta):not(.offer-view-all-btn):not(.seller-form-primary-btn):not(.hero-shop-btn) {
+  background-color: #FDE8DF !important;
+  border-color: #E8A990 !important;
+  color: #7A3E2A !important;
+  -webkit-text-fill-color: #7A3E2A !important;
+}
+
+
+/* Product color swatches — visible borders in dark mode */
+.color-swatch {
+  border: 2px solid rgba(0, 0, 0, 0.2) !important;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+html.dark .color-swatch {
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), inset 0 0 0 1px rgba(0, 0, 0, 0.35);
+  outline: 1px solid rgba(255, 255, 255, 0.2);
+  outline-offset: 1px;
+}
+html.dark .color-swatch.color-swatch--active {
+  border-color: #FF6B35 !important;
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.55);
+  outline-color: #FF6B35;
+}
+.color-swatch.color-swatch--active {
+  border-color: #0071E3 !important;
+  box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.35);
+}
+
+
+/* Seller product form primary step button — readable text on white in dark */
+.seller-form-primary-btn {
+  background-color: #1F2937 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+html.dark .seller-form-primary-btn,
+html.dark button.seller-form-primary-btn {
+  background-color: #FFFFFF !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+  border: 1px solid rgba(255,255,255,0.2) !important;
+}
+html.dark .seller-form-primary-btn:hover {
+  background-color: #E8E8E8 !important;
+  color: #0A0A0A !important;
+  -webkit-text-fill-color: #0A0A0A !important;
+}
+
+
+/* Followed seller — pastel green (selected / on) */
+button.seller-follow-on,
+.seller-follow-on {
+  background-color: #D1FAE5 !important;
+  border-color: #34D399 !important;
+  color: #065F46 !important;
+  -webkit-text-fill-color: #065F46 !important;
+  font-weight: 600;
+}
+html.dark button.seller-follow-on,
+html.dark .seller-follow-on {
+  background-color: #2C4038 !important;
+  border-color: #A8E0C2 !important;
+  color: #E8FAF0 !important;
+  -webkit-text-fill-color: #E8FAF0 !important;
+  box-shadow: 0 0 0 1px rgba(168, 224, 194, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+/* ========== Dark mode: selected filter chips = pastel (global) ========== */
+html.dark .search-filter-chip--on,
+html.dark button.search-filter-chip--on,
+html.dark .plp-chip--on,
+html.dark button.plp-chip--on,
+html.dark .seller-rank-tab--active,
+html.dark button.seller-rank-tab--active,
+html.dark .size-chip--active,
+html.dark button.size-chip--active,
+html.dark button.plp-toggle-on,
+html.dark .plp-filter-chip--on {
+  background-color: #46302C !important;
+  border-color: #FFB89A !important;
+  color: #FFF1EA !important;
+  -webkit-text-fill-color: #FFF1EA !important;
+  box-shadow: 0 0 0 1px rgba(255, 184, 154, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+html.dark button.plp-toggle-on--sky {
+  background-color: #2C3D4F !important;
+  border-color: #A8CDEF !important;
+  color: #EAF5FF !important;
+  -webkit-text-fill-color: #EAF5FF !important;
+  box-shadow: 0 0 0 1px rgba(168, 205, 239, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+html.dark button.plp-toggle-on--emerald {
+  background-color: #2C4038 !important;
+  border-color: #A8E0C2 !important;
+  color: #E8FAF0 !important;
+  -webkit-text-fill-color: #E8FAF0 !important;
+  box-shadow: 0 0 0 1px rgba(168, 224, 194, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+/* Tailwind dark:bg-[#FF6B35] on selected filter-like rounded chips */
+html.dark button.rounded-full.dark\:bg-\[\#FF6B35\],
+html.dark button[class*="dark:bg-[#FF6B35]"],
+html.dark button[class*="dark:bg-\[\#FF6B35\]"].rounded-full {
+  background-color: #46302C !important;
+  border-color: #FFB89A !important;
+  color: #FFF1EA !important;
+  -webkit-text-fill-color: #FFF1EA !important;
+}
+/* Selected chips that use solid orange bg class in dark */
+html.dark button.bg-\[\#FF6B35\].rounded-full,
+html.dark button[class*="bg-[#FF6B35]"].rounded-full,
+html.dark button[class*="bg-\[\#FF6B35\]"].rounded-full:not(.seller-banner-cta):not(.offer-view-all-btn) {
+  background-color: #46302C !important;
+  border-color: #FFB89A !important;
+  color: #FFF1EA !important;
+  -webkit-text-fill-color: #FFF1EA !important;
+}
+
+
+/* Mega menu panel — dark surface slightly above pure black page */
+html.dark .mega-menu-panel {
+  background-color: #1A1C20 !important;
+  border-bottom-color: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45) !important;
+}
+
+
+/* Header icon buttons — readable background in dark */
+html.dark .header-icon-btn {
+  background-color: #2A2C30 !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  color: #FFFFFF !important;
+}
+html.dark .header-icon-btn svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+html.dark .header-icon-btn:hover {
+  background-color: #1A1C20 !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+
+/* PLP filter column — selected toggles/chips MUST use pastel in dark */
+html.dark aside.plp-filter-aside button.plp-toggle-on,
+html.dark aside.plp-filter-aside button.plp-toggle-on.plp-toggle-on--sky,
+html.dark aside.plp-filter-aside button.plp-toggle-on.plp-toggle-on--emerald,
+html.dark .plp-filter-aside button.plp-toggle-on,
+html.dark .plp-filter-aside button.plp-toggle-on--sky,
+html.dark .plp-filter-aside button.plp-toggle-on--emerald {
+  font-weight: 600 !important;
+}
+html.dark aside.plp-filter-aside button.plp-toggle-on--sky,
+html.dark .plp-filter-aside button.plp-toggle-on--sky {
+  background-color: #2C3D4F !important;
+  border-color: #A8CDEF !important;
+  color: #EAF5FF !important;
+  -webkit-text-fill-color: #EAF5FF !important;
+}
+html.dark aside.plp-filter-aside button.plp-toggle-on--emerald,
+html.dark .plp-filter-aside button.plp-toggle-on--emerald {
+  background-color: #2C4038 !important;
+  border-color: #A8E0C2 !important;
+  color: #E8FAF0 !important;
+  -webkit-text-fill-color: #E8FAF0 !important;
+}
+html.dark aside.plp-filter-aside button.plp-chip--on,
+html.dark .plp-filter-aside button.plp-chip--on,
+html.dark aside.plp-filter-aside button.search-filter-chip--on,
+html.dark .plp-filter-aside button[class*="bg-[#FF6B35]"],
+html.dark .plp-filter-aside button[class*="bg-\[\#FF6B35\]"] {
+  background-color: #46302C !important;
+  border-color: #FFB89A !important;
+  color: #FFF1EA !important;
+  -webkit-text-fill-color: #FFF1EA !important;
+}
+
+
+/* شروع فروش CTA — orange bg, white text */
+html button.seller-banner-cta,
+html.dark button.seller-banner-cta,
+button.seller-banner-cta.seller-banner-cta,
+html.dark button.seller-banner-cta.seller-banner-cta {
+  background-color: #FF6B35 !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border: 1px solid #FF6B35 !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+html button.seller-banner-cta:hover,
+html.dark button.seller-banner-cta:hover,
+html button.seller-banner-cta:focus-visible,
+html.dark button.seller-banner-cta:focus-visible {
+  background-color: #FF8F6B !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  border-color: #FF8F6B !important;
+}
+html button.seller-banner-cta svg,
+html.dark button.seller-banner-cta svg,
+html button.seller-banner-cta:hover svg,
+html.dark button.seller-banner-cta:hover svg {
+  color: #FFFFFF !important;
+  stroke: #FFFFFF !important;
+}
+
+
+/* Dark mode: all text links orange */
+html.dark a:not([class*="bg-"]):not(.bg-apple-blue):not(.seller-banner-cta):not(.offer-view-all-btn):not(.social-icon-btn):not(.header-icon-btn) {
+  color: #FF6B35 !important;
+  -webkit-text-fill-color: #FF6B35 !important;
+}
+html.dark a:not([class*="bg-"]):not(.bg-apple-blue):not(.seller-banner-cta):not(.offer-view-all-btn):not(.social-icon-btn):hover {
+  color: #FF8F6B !important;
+  -webkit-text-fill-color: #FF8F6B !important;
+}
+/* Tailwind text-apple-blue links also orange in dark */
+html.dark .text-apple-blue,
+html.dark a.text-apple-blue,
+html.dark button.text-apple-blue {
+  color: #FF6B35 !important;
+  -webkit-text-fill-color: #FF6B35 !important;
+}
+html.dark a.text-apple-blue:hover,
+html.dark button.text-apple-blue:hover {
+  color: #FF8F6B !important;
+  -webkit-text-fill-color: #FF8F6B !important;
+}
+
+
+/* Force active state for موجودی و ارسال toggles */
+html.dark button.plp-toggle-on.plp-toggle-on--sky,
+html.dark .plp-filter-aside button.plp-toggle-on--sky {
+  background-color: #2C3D4F !important;
+  border-color: #A8CDEF !important;
+  color: #EAF5FF !important;
+  -webkit-text-fill-color: #EAF5FF !important;
+}
+html.dark button.plp-toggle-on.plp-toggle-on--emerald,
+html.dark .plp-filter-aside button.plp-toggle-on--emerald {
+  background-color: #2C4038 !important;
+  border-color: #A8E0C2 !important;
+  color: #E8FAF0 !important;
+  -webkit-text-fill-color: #E8FAF0 !important;
+}
+html:not(.dark) button.plp-toggle-on.plp-toggle-on--sky {
+  background-color: #E0F2FE !important;
+  border-color: #7DD3FC !important;
+  color: #0C4A6E !important;
+  -webkit-text-fill-color: #0C4A6E !important;
+}
+html:not(.dark) button.plp-toggle-on.plp-toggle-on--emerald {
+  background-color: #D1FAE5 !important;
+  border-color: #6EE7B7 !important;
+  color: #065F46 !important;
+  -webkit-text-fill-color: #065F46 !important;
+}
+
+
+/* Color swatches — ALWAYS show real color in dark (override chip rules) */
+html.dark .color-swatch,
+html.dark button.color-swatch,
+html.dark span.color-swatch {
+  background-color: var(--swatch-color, #888) !important;
+  background-image: none !important;
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+html.dark .color-swatch.color-swatch--active,
+html.dark button.color-swatch.color-swatch--active {
+  border-color: #FF6B35 !important;
+  box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.5) !important;
+}
+
+
+/* SimpleEditor text-color palette — real colors in dark */
+html.dark button.se-text-color-swatch,
+html.dark .se-text-color-swatch {
+  background-color: var(--swatch-color, #888) !important;
+  background-image: none !important;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.25) !important;
+}
+
+
+/* Header/footer logo — readable in dark */
+html.dark header img[alt="پیراهن مردانه"],
+html.dark footer img[alt="پیراهن مردانه"],
+html.dark .site-logo-img {
+  opacity: 1 !important;
+  filter: brightness(0) invert(1) !important;
+  -webkit-filter: brightness(0) invert(1) !important;
+}
+html:not(.dark) header img[alt="پیراهن مردانه"],
+html:not(.dark) footer img[alt="پیراهن مردانه"],
+html:not(.dark) .site-logo-img {
+  opacity: 1 !important;
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+
+/* Wishlist toolbar selects — readable chevron (light + dark) */
+.wishlist-toolbar-select {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  padding-inline-start: 1.65rem !important;
+  padding-inline-end: 0.55rem !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5' stroke='%231d1d1f' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: left 0.45rem center !important;
+  background-size: 14px 14px !important;
+}
+html.dark .wishlist-toolbar-select,
+.dark .wishlist-toolbar-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M7 10l5 5 5-5' stroke='%23FFFFFF' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: left 0.45rem center !important;
+  background-size: 14px 14px !important;
+}
+
+
+/* Footer column titles — same baseline/height so columns align */
+.footer-col-title {
+  margin-top: 0 !important;
+  min-height: 1.75rem;
+  line-height: 1.25 !important;
+  display: flex;
+  align-items: center;
+}
+
+
+/* PLP performance — skip offscreen layout work */
+.product-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 360px 420px;
+}
+
+
+/* Site form/step modals — always above sticky header (z-100) & drawers; 90% width
+   Applies to buyer / seller / admin form dialogs (not side drawers). */
+.site-modal-root {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 20000 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.75rem !important;
+  isolation: isolate;
+  pointer-events: auto !important;
+}
+@media (max-width: 639px) {
+  .site-modal-root {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+}
+.site-modal-root > .site-modal-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0 !important;
+}
+/* Panel: 90% viewport width, never under header (exclude full-screen backdrops) */
+.site-modal-panel,
+.site-modal-root > div:not(.site-modal-backdrop):not([class*="inset-0"]) {
+  position: relative !important;
+  z-index: 1 !important;
+  width: 90vw !important;
+  max-width: 90vw !important;
+  max-height: 90dvh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 1rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box !important;
+}
+@media (max-width: 639px) {
+  .site-modal-panel,
+  .site-modal-root > div:not(.site-modal-backdrop):not([class*="inset-0"]) {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 92dvh !important;
+    border-radius: 1rem 1rem 0 0 !important;
+  }
+}
+/* Normalize non-standard backdrops inside site-modal-root */
+.site-modal-root > div.absolute.inset-0,
+.site-modal-root > .absolute.inset-0 {
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  z-index: 0 !important;
+}
+
+/* Product card image badges — equal width, flush right */
+.product-card-badges {
+  width: max-content;
+  max-width: 45%;
+  align-items: stretch;
+}
+.product-card-badge {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+
+/* === frontend-ux-polish === */
+/* No global color/font/hero changes — layout, a11y, motion, overflow only */
+
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body.site-modal-open {
+  overflow: hidden !important;
+  touch-action: none;
+  overscroll-behavior: none;
+}
+
+/* Prevent accidental horizontal scroll on mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Keyboard focus — uses existing brand token only */
+:focus-visible {
+  outline: 2px solid var(--color-apple-blue, #0071e3);
+  outline-offset: 2px;
+}
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Broken image fallback surface */
+img.img-broken {
+  object-fit: contain;
+  background: color-mix(in srgb, var(--color-primary-100, #f5f5f7) 80%, transparent);
+  opacity: 0.7;
+}
+
+/* Touch-friendly icon controls on coarse pointers */
+@media (pointer: coarse) {
+  .header-icon-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Sticky tab strips in panels stay usable under header */
+.admin-panel-shell .admin-tabs-strip,
+.seller-panel-shell .seller-tabs-strip {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Site modal panel keyboard scroll */
+.site-modal-panel {
+  overscroll-behavior: contain;
+}
+
+/* Safe area for fixed bottom bars */
+.safe-area-pb {
+  padding-bottom: max(0.625rem, env(safe-area-inset-bottom, 0px));
+}
+
+/* Selection readability */
+::selection {
+  background: color-mix(in srgb, var(--color-apple-blue, #0071e3) 35%, transparent);
+}
+
+/* Reduce layout shift for lazy product images */
+.product-card img {
+  background-color: var(--color-primary-50, #fafafa);
 }

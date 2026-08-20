@@ -1,0 +1,7 @@
+{
+  "budgets": [
+    { "path": "/", "lcpMs": 3500, "tbtMs": 400, "cls": 0.1 },
+    { "path": "/?view=shop", "lcpMs": 4000, "tbtMs": 500, "cls": 0.1 }
+  ],
+  "notes": "هدف موبایل ایران (4G). اندازه‌گیری با Lighthouse/PageSpeed. هیرو رسانه‌ای سنگین است و LCP را بالا می‌برد."
+}
